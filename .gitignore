@@ -1,5 +1,21 @@
+# Python
 __pycache__/
+*.pyc
+
+# Jupyter
 .ipynb_checkpoints/
-.env
+
+# Models (optional if large)
 *.pkl
+
+# preprocessed data
 data/processed/
+
+# Environment
+ml_env/
+venv/
+.env/
+
+# OS / IDE
+.DS_Store
+.vscode/
