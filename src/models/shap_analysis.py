@@ -126,12 +126,12 @@ def shap_analysis(disease, input_df):
     # ================================
     # 🔥 BAR PLOT (Feature Importance)
     # ================================
-    # shap.summary_plot(
-    #     shap_array,
-    #     X_scaled,
-    #     feature_names=FEATURE_NAMES,
-    #     plot_type="bar"
-    # )
+    shap.summary_plot(
+        shap_array,
+        X_scaled,
+        feature_names=FEATURE_NAMES,
+        plot_type="bar"
+    )
 
     # ================================
     # 🔥 FORCE PLOT (Single Prediction)

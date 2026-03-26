@@ -95,7 +95,7 @@ def predict(input_data: dict):
 
         results[disease] = {
             "prediction": int(pred),
-            "probability": float(round(prob, 4)),
+            "Risk Score": float(round(prob, 4)),
             "risk_level": risk
         }
 
@@ -121,13 +121,13 @@ def predict(input_data: dict):
 if __name__ == "__main__":
 
     sample_input = {
-        'Age': 50,
-        'BMI': 30,
-        'HighChol': 1,
-        'PhysActivity': 0,
-        'Smoker': 1,
-        'PreventiveCareIndex': 1,
-        'RiskScore': 0.7
+        'Age': 25,
+        'BMI': 20.5,
+        'HighChol': 0,
+        'PhysActivity': 1,
+        'Smoker': 0,
+        'PreventiveCareIndex': 0,
+        'RiskScore': 0
     }
 
     output = predict(sample_input)
