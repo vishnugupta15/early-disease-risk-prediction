@@ -116,7 +116,7 @@ def predict(input_data: dict):
 
 
 # ================================
-# 🔹 Example Run (CLI Testing)
+# 🔹 Example Run (Testing)
 # ================================
 if __name__ == "__main__":
 
