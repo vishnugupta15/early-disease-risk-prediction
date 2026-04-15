@@ -2,6 +2,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from pathlib import Path
+import shap
 
 # ================================
 # 📁 Paths
@@ -9,7 +10,7 @@ from pathlib import Path
 MODEL_DIR = Path("models")
 
 # ================================
-# 🔹 Feature Names (IMPORTANT)
+# 🔹 Feature Names
 # ================================
 FEATURE_NAMES = [
     'Age',
@@ -32,102 +33,132 @@ DISEASES = [
 ]
 
 # ================================
-# 🔹 Load Models & Scalers
+# 🔹 Load Models (LOAD ONCE)
 # ================================
 def load_models():
     models = {}
     scalers = {}
 
     for disease in DISEASES:
-        model_path = MODEL_DIR / f"{disease}_model.pkl"
-        scaler_path = MODEL_DIR / f"{disease}_scaler.pkl"
-
-        models[disease] = joblib.load(model_path)
-        scalers[disease] = joblib.load(scaler_path)
+        models[disease] = joblib.load(MODEL_DIR / f"{disease}_model.pkl")
+        scalers[disease] = joblib.load(MODEL_DIR / f"{disease}_scaler.pkl")
 
     return models, scalers
 
 
+# Load once globally
+MODELS, SCALERS = load_models()
+
 # ================================
-# 🔹 Risk Category Function
+# 🔹 SHAP Explanation
+# ================================
+def generate_explanation(model, scaler, input_df):
+    X_scaled = scaler.transform(input_df)
+
+    # Better background (IMPORTANT)
+    background = np.zeros((50, X_scaled.shape[1]))
+
+    explainer = shap.Explainer(model.predict_proba, background)
+    shap_values = explainer(X_scaled)
+
+    # Correct extraction
+    values = shap_values.values
+
+    # Handle shapes safely
+    if len(values.shape) == 3:
+        values = values[0, :, 1]   # binary class 1
+    else:
+        values = values[0]
+
+    feature_impact = list(zip(FEATURE_NAMES, values))
+    feature_impact.sort(key=lambda x: abs(x[1]), reverse=True)
+
+    explanation = []
+
+    for feature, value in feature_impact[:5]:
+        if abs(value) < 1e-4:
+            continue  # skip meaningless features
+
+        direction = "increases" if value > 0 else "decreases"
+        explanation.append(f"{feature} {direction} risk")
+
+    # fallback (if empty)
+    if not explanation:
+        explanation = ["No strong contributing factors detected"]
+
+    return explanation
+
+# ================================
+# 🔹 Risk Category
 # ================================
 def risk_category(prob):
     if prob < 0.3:
         return "Low"
     elif prob < 0.7:
         return "Medium"
-    else:
-        return "High"
+    return "High"
 
 
 # ================================
 # 🔹 Prediction Function
 # ================================
 def predict(input_data: dict):
-    """
-    input_data: dictionary with feature values
-    """
 
-    # Convert to DataFrame
-    input_df = pd.DataFrame([input_data])
-
-    models, scalers = load_models()
+    # Ensure correct feature order
+    input_df = pd.DataFrame([input_data])[FEATURE_NAMES]
 
     results = {}
     probabilities = []
 
     for disease in DISEASES:
 
-        model = models[disease]
-        scaler = scalers[disease]
+        model = MODELS[disease]
+        scaler = SCALERS[disease]
 
-        # Scale input
         X_scaled = scaler.transform(input_df)
 
-        # Prediction
-        pred = model.predict(X_scaled)[0]
+        pred = int(model.predict(X_scaled)[0])
+        prob = float(model.predict_proba(X_scaled)[0][1])
 
-        # Probability (class 1)
-        prob = model.predict_proba(X_scaled)[0][1]
-
-        # Risk level
         risk = risk_category(prob)
 
+        explanation = generate_explanation(model, scaler, input_df)
+
         results[disease] = {
-            "prediction": int(pred),
-            "Risk Score": float(round(prob, 4)),
-            "risk_level": risk
+            "prediction": pred,
+            "probability": round(prob, 4),
+            "risk_level": risk,
+            "top_factors": explanation
         }
 
         probabilities.append(prob)
 
     # ================================
-    # 🔥 Combined Risk Score
+    # 🔥 Combined Risk
     # ================================
-    combined_score = np.mean(probabilities)
-    combined_level = risk_category(combined_score)
+    combined_score = float(np.mean(probabilities))
 
     results["combined_risk"] = {
-        "score": float(round(combined_score, 4)),
-        "level": combined_level
+        "score": round(combined_score, 4),
+        "level": risk_category(combined_score)
     }
 
     return results
 
 
 # ================================
-# 🔹 Example Run (Testing)
+# 🔹 Example Run
 # ================================
 if __name__ == "__main__":
 
     sample_input = {
         'Age': 25,
-        'BMI': 20.5,
+        'BMI': 21.5,
         'HighChol': 0,
         'PhysActivity': 1,
         'Smoker': 0,
-        'PreventiveCareIndex': 0,
-        'RiskScore': 0
+        'PreventiveCareIndex': 5,
+        'RiskScore': 0.7
     }
 
     output = predict(sample_input)
@@ -135,4 +166,6 @@ if __name__ == "__main__":
     print("\n🔮 Prediction Results:\n")
 
     for disease, result in output.items():
-        print(f"{disease.upper()}: {result}")
+        print(f"{disease.upper()}:")
+        print(result)
+        print("-" * 40)

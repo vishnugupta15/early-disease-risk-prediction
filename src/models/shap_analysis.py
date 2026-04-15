@@ -128,7 +128,7 @@ def shap_analysis(disease, input_df):
     # ================================
     shap.summary_plot(
         shap_array,
-        X_scaled,
+        X_scaled,       
         feature_names=FEATURE_NAMES,
         plot_type="bar"
     )
@@ -161,7 +161,7 @@ if __name__ == "__main__":
             'PhysActivity': 0,
             'Smoker': 1,
             'PreventiveCareIndex': 1,
-            'RiskScore': 0.7
+            'RiskScore': 2
         }
     ])
 
