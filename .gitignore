@@ -5,12 +5,6 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 
-# Models (optional if large)
-*.pkl
-
-# preprocessed data
-data/processed/
-
 # Environment
 ml_env/
 venv/
