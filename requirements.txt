@@ -1,0 +1,12 @@
+joblib
+numpy
+pandas
+streamlit>=1.33
+altair==4.2.2
+plotly
+shap
+pathlib
+matplotlib
+scikit-learn==1.4.2
+seaborn==0.13.2
+xgboost==2.0.3
