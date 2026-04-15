@@ -60,7 +60,7 @@ with tab1:
     activity = st.sidebar.selectbox("Physical Activity", [0, 1])
     smoker = st.sidebar.selectbox("Smoker", [0, 1])
     preventive = st.sidebar.slider("Preventive Care Index", 0, 5, 2)
-    risk_score = st.sidebar.number_input("General Risk Score", 0.0, 5.0, 2.0)
+    risk_score = st.sidebar.slider("General Risk Score", 0, 2, 1)
 
     if st.sidebar.button("🚀 Predict Risk"):
 
