@@ -1,4 +1,5 @@
 # Early Multi-Disease Risk Prediction System
+https://early-disease-risk-prediction.streamlit.app/
 
 This project predicts early risk of multiple chronic diseases using a unified health indicators dataset.
 
