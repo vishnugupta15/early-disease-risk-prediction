@@ -79,8 +79,8 @@ def generate_explanation(model, scaler, input_df):
         if abs(value) < 1e-4:
             continue  # skip meaningless features
 
-        direction = "increases" if value > 0 else "decreases"
-        explanation.append(f"{feature} {direction} risk")
+        direction = "" if value > 0 else ""
+        explanation.append(f"{feature} {direction}")
 
     # fallback (if empty)
     if not explanation:
