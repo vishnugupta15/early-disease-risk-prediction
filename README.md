@@ -93,9 +93,9 @@ This project aims to **leverage machine learning to predict disease risks early*
 ![roc-auc Curve](reports/figures/roc_auc_curve.png)
 ### Confusion Matrix
 ![conf_mat](reports/figures/confusion_matrix1.png)
-![conf_mat](reports/figures/confusion_matrix1.png)
-![conf_mat](reports/figures/confusion_matrix1.png)
-![conf_mat](reports/figures/confusion_matrix1.png)
+![conf_mat](reports/figures/confusion_matrix2.png)
+![conf_mat](reports/figures/confusion_matrix3.png)
+![conf_mat](reports/figures/confusion_matrix4.png)
 
 ### Class Imbalance Distribution
 ![class-imbalance](reports/figures/class_imbalance1.png)
