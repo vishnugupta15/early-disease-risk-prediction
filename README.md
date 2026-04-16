@@ -89,11 +89,25 @@ This project aims to **leverage machine learning to predict disease risks early*
 
 ## 📈 Visualizations
 
-* ROC-AUC Curve
-* Confusion Matrix
-* Class Imbalance Distribution
-* Feature Importance Graphs
-* Model Comparison Charts
+### ROC-AUC Curve
+![roc-auc Curve](reports/figures/roc_auc_curve.png)
+### Confusion Matrix
+![conf_mat](reports/figures/confusion_matrix1.png)
+![conf_mat](reports/figures/confusion_matrix1.png)
+![conf_mat](reports/figures/confusion_matrix1.png)
+![conf_mat](reports/figures/confusion_matrix1.png)
+
+### Class Imbalance Distribution
+![class-imbalance](reports/figures/class_imbalance1.png)
+![class-imbalance](reports/figures/class_imbalance2.png)
+![class-imbalance](reports/figures/class_imbalance3.png)
+![class-imbalance](reports/figures/class_imbalance4.png)
+
+### Feature Importance Graphs
+![feature_importance](reports/figures/Diabetes_feature_Importance.png)
+![feature_importance](reports/figures/Heart-Disease_feature_importance.png)
+![feature_importance](reports/figures/HighBP_feature_importance.png)
+![feature_importance](reports/figures/Stroke_feature_importance.png)
 
 *(See `/reports/figures/` for all visuals)*
 
